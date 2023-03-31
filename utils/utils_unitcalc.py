@@ -5,7 +5,7 @@ import os
 import argparse
 from PIL import Image
 
-def unit_cal(img_path="metric/metric.png", ksize=6):
+def unit_cal(img_path="utils/metric/metric.png", ksize=6):
     # read image and preprocessing
     img = cv2.imread(img_path)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -32,7 +32,7 @@ def unit_cal(img_path="metric/metric.png", ksize=6):
     len_unit = np.argmax(np.bincount(edges))
     square_unit = np.square(len_unit)
     # write the parameters into file
-    param_filename = "units.py"
+    param_filename = "utils/units.py"
     try:
         os.remove(param_filename)
     except:
@@ -44,13 +44,17 @@ def unit_cal(img_path="metric/metric.png", ksize=6):
 # params setting
 def parse_opt():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--img_path", type=str, default="metric/metric.png", help="image path")
+    parser.add_argument("--img_path", type=str, default="utils/metric/metric.png", help="image path")
     parser.add_argument("--ksize", type=int, default=6, help="setting kernel size for close process")
     opt = parser.parse_args()
     return opt
 
 def main(opt):
-    unit_cal(**vars(opt))
+    try:
+        unit_cal(**vars(opt))
+        print("unit file generated.")
+    except:
+        print("Please ensure the metric-using image 'metric.png' has been put in 'utils/metric/' folder.")
 
 if __name__ == "__main__":
     opt = parse_opt()

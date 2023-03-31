@@ -109,7 +109,7 @@ if __name__ == "__main__":
             dcarea_arr = np.array(all_decent_areas)
             dcarea_df = pd.DataFrame(dcarea_arr)
             if len(dcarea_arr[0]) == 5:
-                dcarea_df.columns=["filename", "decent_length", "decent_angle", "TZ_area", "DF_area"]
+                dcarea_df.columns=["filename", "decent_length", "decent_angle", "TZ_area", "PSZ_area"]
                 dcarea_df.to_excel(os.path.join(dir_save_path, "Dec_Area_Data.xlsx"), index=False)
             elif len(dcarea_arr[0]) == 4:
                 dcarea_df.columns=["filename", "decent_length", "decent_angle", "TZ_area"]
