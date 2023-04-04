@@ -39,9 +39,10 @@ mode = "predict"
 ```
 and input commond in Powershell as follow to launch the model:
 ```cmd
-python installment.py
+.\venv\Scripts\Activate.ps1
+python predict.py
 ```
-and the segmentation result will be saved in <font color=#FFFF00>***"outputs/"***</font> folder.
+and then input the image path in command line. The segmentation result will be saved in <font color=#FFFF00>***"outputs/"***</font> folder.
 
 ## Weights
 All trained model information can be obtained by contacting the author. The weight file for the built-in "backbone 0" is included in the repository (<font color=#FFFF00>***"model_data/model.pth"***</font>).
