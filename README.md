@@ -39,7 +39,6 @@ mode = "predict"
 ```
 and input commond in Powershell as follow to launch the model:
 ```cmd
-.\venv\Scripts\Activate.ps1
 python installment.py
 ```
 and the segmentation result will be saved in <font color=#FFFF00>***"outputs/"***</font> folder.
