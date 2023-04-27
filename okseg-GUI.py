@@ -12,9 +12,6 @@ root_path = os.path.abspath('.')
 dir_input_path = os.path.join(root_path, "img")
 
 def detect(input_img, is_dir, dir_origin_path, mix_type_3=True, output_path="outputs/"):
-    #-------------------------------------------------------------------------#
-    #   如果想要修改对应种类的颜色，到generate函数里修改self.colors即可
-    #-------------------------------------------------------------------------#
     segformer = SegFormer_Segmentation()
     #----------------------------------------------------------------------------------------------------------#
     #   mode用于指定测试的模式：
@@ -33,7 +30,6 @@ def detect(input_img, is_dir, dir_origin_path, mix_type_3=True, output_path="out
     #-------------------------------------------------------------------------#
     count           = True
     name_classes    = ["background", "Treatment_Zone", "Defocus_Ring"]
-    # name_classes    = ["background","cat","dog"]
     #-------------------------------------------------------------------------#
     #   dir_origin_path     指定了用于检测的图片的文件夹路径
     #   dir_save_path       指定了检测完图片的保存路径
