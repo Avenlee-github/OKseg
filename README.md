@@ -4,7 +4,7 @@
 ### Catalogue
 1. [Installment](#Installment)
 2. [Preparation](#Preparation)
-3. [GUI Utilization](#GUI Utilization)
+3. [GUI_Utilization](#GUI_Utilization)
 4. [Weights](#Weights)
 5. [Configuration](#Configuration)
 6. [Declaration](#Declaration)
@@ -34,7 +34,7 @@ The model requires following setting:
 
 4. Make sure that all of the previous prediction result files have been cleared from the <font color=#FFFF00>***"img_out/"***</font> folder.
 
-## GUI Utilization
+## GUI_sUtilization
 1. **Running the Model:** We provide a GUI interface to facilitate the user's invocation of the model. By double clicking on the <font color=#FFFF00>***"OK-Detection.bat"***</font> file, the model can be run, and by accessing [**http://127.0.0.1:7860**](http://127.0.0.1:7860/), the GUI interface (shown in the figure below) can be opened.
 
   ![GUI](.\figures\GUI.png)
