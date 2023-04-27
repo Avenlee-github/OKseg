@@ -47,7 +47,7 @@ The model requires following setting:
 
   ![Batch Detection](.\figures\batch_detection.png)
 
-4. **Untagged images:** If you need to export untagged images without the label in the top left corner, set the ***"tag"*** parameter in the ***"segformer.py"***file to ***"False"***.
+4. **Untagged images:** If you need to export untagged images without the label in the top left corner, set the ***"tag"*** parameter in the ***"segformer.py"*** file to ***"False"***.
 
 ## Weights
 All trained model information can be obtained by contacting the author. The weight file for the built-in "backbone 0" is included in the repository (<font color=#FFFF00>***"model_data/model.pth"***</font>).
