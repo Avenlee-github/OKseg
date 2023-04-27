@@ -4,13 +4,14 @@
 ### Catalogue
 1. [Installment](#Installment)
 2. [Preparation](#Preparation)
-3. [Utilization](#Utilization)
+3. [GUI Utilization](#GUI Utilization)
 4. [Weights](#Weights)
 5. [Configuration](#Configuration)
 6. [Declaration](#Declaration)
 7. [Reference](#Reference)
 
 ## Installment
+
 1. Please ensure that Python 3 has been installed on your computer.
 2. Clone the repository to your computer/device.
 3. Open the Powershell or Command Line Interface;
@@ -23,32 +24,36 @@ python installment.py
 
 ## Preparation
 The model requires following setting:
-1. Weight file: The model needs to load a weight file for prediction. All weight files are stored in the <font color=#FFFF00>***"model_data"***</font> folder. To load the corresponding weight file during runtime, rename the weight file you want to load as <font color=#FFFF00>***"model.pth"***</font>. When modifying the weight file, you also need to modify the <font color=#008000>***"phi"***</font> parameter in the <font color=#FFFF00>***"segformer.py"***</font> file to the corresponding backbone of the weight file. For example, if the weight file is named <font color=#FFFF00>***"b1_weights.pth"***</font>, modify it to <font color=#008000>***"b1"***</font>. By default, the value is <font color=#008000>***"b0"***</font>, and the weight file in the <font color=#FFFF00>***"model_data/"***</font> folder is also "b0" by default.
-2. Unit file: Due to the inability of the Medmont Topographer to export topography files of the same size, this experiment uses cropped topography images for training. Therefore, when exporting prediction results, different devices may have different image sizes, so it is necessary to first obtain a grid screenshot without color topography (as shown in the <font color=#FFFF00>***"metric.png"***</font> image in the <font color=#FFFF00>***"utils/metric/"***</font> folder), and use the same screenshot captured on the computer connected to the topographer for calculation. After obtaining the image, replace <font color=#FFFF00>***"metric.png"***</font> file in the <font color=#FFFF00>***"utils/metric/"***</font> folder. During usage, a <font color=#FFFF00>***"units.py"***</font> file will be automatically generated in the <font color=#FFFF00>***"utils/"***</font> folder, which contains the pixel values corresponding to each millimeter and square millimeter. If the <font color=#FFFF00>***"metric.png"***</font> file is not available, the output image will be in pixel units for distance and area.
-3. Image preparation: The images were captured using the computer's built-in screenshot tool and saved as screenshots of the topography to be detected. Save the images to be detected in the <font color=#FFFF00>***"img/images/"***</font> folder. The image formats of "png" and "jpg" are allowed for the model.
+1. Weight file: The model needs to load a weight file for prediction. All weight files are stored in the <font color=#FFFF00>***"model_data"***</font> folder. To load the corresponding weight file during runtime, rename the weight file you want to load as <font color=#FFFF00>***"model.pth"***</font>. When modifying the weight file, you also need to modify the ***"phi"*** parameter in the <font color=#FFFF00>***"segformer.py"***</font> file to the corresponding backbone of the weight file. For example, if the weight file is named <font color=#FFFF00>***"b1_weights.pth"***</font>, modify it to ***"b1"***. By default, the value is ***"b0"***, and the weight file in the <font color=#FFFF00>***"model_data/"***</font> folder is also "b0" by default.
+
+2. Unit file: Due to the inability of the Medmont Topographer to export topography files of the same size, this experiment uses cropped topography images for training. Therefore, when exporting prediction results, different devices may have different image sizes, so it is necessary to first obtain a grid screenshot without color topography (as shown in the <font color=#FFFF00>***"metric.png"***</font> image in the <font color=#FFFF00>***"utils/metric/"***</font> folder, see following figure), and use the same screenshot captured on the computer connected to the topographer for calculation. After obtaining the image, replace <font color=#FFFF00>***"metric.png"***</font> file in the <font color=#FFFF00>***"utils/metric/"***</font> folder. During usage, a <font color=#FFFF00>***"units.py"***</font> file will be automatically generated in the <font color=#FFFF00>***"utils/"***</font> folder, which contains the pixel values corresponding to each millimeter and square millimeter. If the <font color=#FFFF00>***"metric.png"***</font> file is not available, the output image will be in pixel units for distance and area.
+
+   <img src=".\utils\metric\metric.png" alt="metric" style="zoom:50%;" />
+
+3. Image preparation: The images were captured using the computer's built-in screenshot tool and saved as screenshots of the topography to be detected. Save the images to be detected in the <font color=#FFFF00>***"img/images/"***</font> folder (customized path is available). The image formats of ***".png"*** and ***".jpg"*** are allowed for the model.
+
 4. Make sure that all of the previous prediction result files have been cleared from the <font color=#FFFF00>***"img_out/"***</font> folder.
 
-## Utilization
-1. General usage: We have provided an <font color=#FF000>***"OK-Detection.bat"***</font> file to start the model. After configuring the environment, place the images to be detected in the <font color=#FFFF00>***"img/"***</font> folder. When you run the <font color=#FF000>***"OK-Detection.bat"***</font> file, the model will automatically detect the Treatment Zone and Peripheral Steepened Zone, and save the detected images and the detection results table <font color=#FFFF00>***(Dec_Area_Data.xlsx)***</font> in the <font color=#FFFF00>***"img_out/"***</font> folder.
+## GUI Utilization
+1. **Running the Model:** We provide a GUI interface to facilitate the user's invocation of the model. By double clicking on the <font color=#FFFF00>***"OK-Detection.bat"***</font> file, the model can be run, and by accessing [**http://127.0.0.1:7860**](http://127.0.0.1:7860/), the GUI interface (shown in the figure below) can be opened.
 
-2. Untagged images: If you need to export untagged images without the label in the top left corner, set the <font color=#008000>***"tag"***</font> parameter in the <font color=#FFFF00>***"segformer.py"***</font> file to <font color=#008000>***"False"***</font>.
+  ![GUI](.\figures\GUI.png)
 
-3. Single Image Segmentation: If you want to perform segmentation prediction for only one image, please set the <font color=#008000>***"mode"***</font> parameter in <font color=#FFFF00>***"predict.py"***</font> as follow:
-```python
-mode = "predict"
-```
-and input commond in Powershell as follow to launch the model:
-```cmd
-.\venv\Scripts\Activate.ps1
-python predict.py
-```
-and then input the image path in command line. The segmentation result will be saved in <font color=#FFFF00>***"outputs/"***</font> folder.
+2.  **Single Image Detection:** Drag the image into the ***"Input Image"*** column on the left-hand side of the GUI interface, then simply click the ***"Submit"*** button below to run the detection. The output results will be displayed in the ***"Output Image"*** column on the right-hand side, and the saving path will be shown in the ***"Output images saving path"*** column below on the right-hand side.
+
+  ![Single Detection](.\figures\single_image_detection.png)
+
+3. **Batch Detection:** Batch detection can be achieved by checking the ***"Batch Detection"*** option on the right-hand side. Enter the directory path where the images to be detected are located in the ***"Batch Detection Input Directory"*** section below it. Click the ***"Submit"*** button below to automatically batch detect the images. The detection results will be saved in the path indicated in the ***"Output images saving path"*** column on the right-hand side.
+
+  ![Batch Detection](.\figures\batch_detection.png)
+
+4. **Untagged images:** If you need to export untagged images without the label in the top left corner, set the ***"tag"*** parameter in the ***"segformer.py"***file to ***"False"***.
 
 ## Weights
 All trained model information can be obtained by contacting the author. The weight file for the built-in "backbone 0" is included in the repository (<font color=#FFFF00>***"model_data/model.pth"***</font>).
 
 ## Configuration
-Here are some parameter settings in <font color=#FFFF00>***"segformer.py"***</font>, but it is recommended to only modify the <font color=#008000>***"phi", "cuda", and "tag"***</font> parameters based on your computer's actual situation:
+Here are some parameter settings in <font color=#FFFF00>***"segformer.py"***</font>, but it is recommended to only modify the ***"phi", "cuda", and "tag"*** parameters based on your computer's actual situation:
 ```python
 _defaults = {
     #-------------------------------------------------------------------#

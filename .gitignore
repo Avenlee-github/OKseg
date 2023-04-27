@@ -1,0 +1,12 @@
+# unnecessary files
+venv/
+flagged/
+__pycache__/
+utils/__pycache__/
+utils/hgnet/__pycache__/
+utils/units.py
+__init__.py
+
+# output images
+outputs/*.png
+img_out/*
