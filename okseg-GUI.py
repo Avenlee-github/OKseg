@@ -5,11 +5,16 @@ import numpy as np
 import pandas as pd
 import os
 from PIL import Image
+import threading
+import webbrowser
 
 from segformer import SegFormer_Segmentation
 
 root_path = os.path.abspath('.')
 dir_input_path = os.path.join(root_path, "img")
+
+def open_webpage():
+    webbrowser.open("http://127.0.0.1:7860/")  # 使用默认端口 7860
 
 def detect(input_img, is_dir, dir_origin_path, mix_type_3=True, output_path="outputs/"):
     segformer = SegFormer_Segmentation()
@@ -106,4 +111,5 @@ demo = gr.Interface(
     allow_flagging="never"
     )
 
+threading.Timer(5, open_webpage).start()  # 延迟 5 秒打开浏览器
 demo.launch()
