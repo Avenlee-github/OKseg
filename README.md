@@ -36,18 +36,20 @@ The model requires following setting:
 
 ## GUI_Utilization
 1. **Running the Model:** We provide a GUI interface to facilitate the user's invocation of the model. By double clicking on the <font color=#FFFF00>***"OK-Detection.bat"***</font> file, the model can be run, and by accessing [**http://127.0.0.1:7860**](http://127.0.0.1:7860/), the GUI interface (shown in the figure below) can be opened.
-
-  ![GUI](.\figures\GUI.png)
+  
+  <img src=".\figures\GUI.png" alt="GUI" />
 
 2.  **Single Image Detection:** Drag the image into the ***"Input Image"*** column on the left-hand side of the GUI interface, then simply click the ***"Submit"*** button below to run the detection. The output results will be displayed in the ***"Output Image"*** column on the right-hand side, and the saving path will be shown in the ***"Output images saving path"*** column below on the right-hand side.
 
-  ![Single Detection](.\figures\single_image_detection.png)
+  <img src=".\figures\single_image_detection.png" alt="Single Detection" />
 
 3. **Batch Detection:** Batch detection can be achieved by checking the ***"Batch Detection"*** option on the right-hand side. Enter the directory path where the images to be detected are located in the ***"Batch Detection Input Directory"*** section below it. Click the ***"Submit"*** button below to automatically batch detect the images. The detection results will be saved in the path indicated in the ***"Output images saving path"*** column on the right-hand side.
 
-  ![Batch Detection](.\figures\batch_detection.png)
+  <img src=".\figures\batch_detection.png" alt="Batch Detection" />
 
 4. **Untagged images:** If you need to export untagged images without the label in the top left corner, set the ***"tag"*** parameter in the ***"segformer.py"*** file to ***"False"***.
+
+  <img src=".\figures\comparison.png" alt="Comparison" />
 
 ## Weights
 All trained model information can be obtained by contacting the author. The weight file for the built-in "backbone 0" is included in the repository (<font color=#FFFF00>***"model_data/model.pth"***</font>).
