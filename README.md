@@ -44,7 +44,7 @@ The model requires following setting:
 
 2. Unit file: Due to the inability of the Medmont Topographer to export topography files of the same size, this experiment uses cropped topography images for training. Therefore, when exporting prediction results, different devices may have different image sizes, so it is necessary to first obtain a grid screenshot without color topography (as shown in the <font color=#FFFF00>***"metric.png"***</font> image in the <font color=#FFFF00>***"utils/metric/"***</font> folder, see following figure), and use the same screenshot captured on the computer connected to the topographer for calculation. After obtaining the image, replace <font color=#FFFF00>***"metric.png"***</font> file in the <font color=#FFFF00>***"utils/metric/"***</font> folder. During usage, a <font color=#FFFF00>***"units.py"***</font> file will be automatically generated in the <font color=#FFFF00>***"utils/"***</font> folder, which contains the pixel values corresponding to each millimeter and square millimeter. If the <font color=#FFFF00>***"metric.png"***</font> file is not available, the output image will be in pixel units for distance and area.
 
-   <img src=".\utils\metric\metric.png" alt="metric" style="zoom:50%;" />
+   <img src=".\utils\metric\metric.png" alt="metric" style="zoom:20%;" />
 
 3. Image preparation: The images were captured using the computer's built-in screenshot tool and saved as screenshots of the topography to be detected. Save the images to be detected in the <font color=#FFFF00>***"img/images/"***</font> folder (customized path is available). The image formats of ***".png"*** and ***".jpg"*** are allowed for the model.
 
@@ -53,19 +53,31 @@ The model requires following setting:
 ## GUI_Utilization
 1. **Running the Model:** We provide a GUI interface to facilitate the user's invocation of the model. By double clicking on the <font color=#FFFF00>***"OK-Detection.bat"***</font> file, the model can be run, and by accessing [**http://127.0.0.1:7860**](http://127.0.0.1:7860/), the GUI interface (shown in the figure below) can be opened.
   
-  <img src=".\figures\GUI.png" alt="GUI" />
+  <img src=".\figures\GUI.png" alt="GUI" style="zoom:40%;" />
 
 2.  **Single Image Detection:** Drag the image into the ***"Input Image"*** column on the left-hand side of the GUI interface, then simply click the ***"Submit"*** button below to run the detection. The output results will be displayed in the ***"Output Image"*** column on the right-hand side, and the saving path will be shown in the ***"Output images saving path"*** column below on the right-hand side.
 
-  <img src=".\figures\single_image_detection.png" alt="Single Detection" />
+  <img src=".\figures\single_detection.png" alt="Single Detection" style="zoom:40%;" />
 
 3. **Batch Detection:** Batch detection can be achieved by checking the ***"Batch Detection"*** option on the right-hand side. Enter the directory path where the images to be detected are located in the ***"Batch Detection Input Directory"*** section below it. Click the ***"Submit"*** button below to automatically batch detect the images. The detection results will be saved in the path indicated in the ***"Output images saving path"*** column on the right-hand side.
 
-  <img src=".\figures\batch_detection.png" alt="Batch Detection" />
+  <img src=".\figures\batch_detection.png" alt="Batch Detection" style="zoom:40%;" />
 
 4. **Untagged images:** If you need to export untagged images without the label in the top left corner, set the ***"tag"*** parameter in the ***"segformer.py"*** file to ***"False"***.
 
   <img src=".\figures\comparison.png" alt="Comparison" style="zoom:20%;" />
+
+5. **Pupil Overlap Mode:** If you want to acquire the overlaped area of Pupil with Treatment Zone or Peripheral Steepened Zone, please enable the "Pupil Overlap" button. The single image detection and batch detection mode were show in follow image, and the pupil radius is required for overlap area calculation.
+
+  <img src=".\figures\single_pupil_detection.png" alt="Single Pupil Detection" style="zoom:40%;" />
+
+  The following image show the Batch Pupil Overlap Detection mode, and the pupil radius data are required and formated as .xlsx table (an example file could be found in <font color=#FFFF00>***"img/pupil_radius.xlsx"***</font>), and the absolute path for the table file should be provided.
+
+  <img src=".\figures\batch_pupil_detection.png" alt="Batch Pupil Detection" style="zoom:40%;" />
+
+And the following image show the comparison of normal detection result and pupil overlap detection result.
+
+  <img src=".\figures\pupil_overlap_comparison.png" alt="Pupil Overlap Comparison" style="zoom:20%;" />
 
 ## Weights
 All trained model information can be obtained by contacting the author. The weight file for the built-in "backbone 0" is included in the repository (<font color=#FFFF00>***"model_data/model.pth"***</font>).

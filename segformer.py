@@ -119,7 +119,7 @@ class SegFormer_Segmentation(object):
     #---------------------------------------------------#
     #   检测图片
     #---------------------------------------------------#
-    def detect_image(self, image, count=False, name_classes=None):
+    def detect_image(self, image, count=False, name_classes=None, r=None):
         #---------------------------------------------------------#
         #   在这里将图像转换成RGB图像，防止灰度图在预测时报错。
         #   代码仅仅支持RGB图像的预测，所有其它类型的图像都会转化成RGB
@@ -235,7 +235,7 @@ class SegFormer_Segmentation(object):
             #   添加离心度
             #------------------------------------------------#
             oc = predict(img=old_img, model=self.hgnet, mode="coordinate")
-            decentration = Decentration_Cal(segment=seg_img, image=old_img, optic_center=oc, tag=self._defaults["tag"], defocus=True)
+            decentration = Decentration_Cal(segment=seg_img, image=old_img, optic_center=oc, tag=self._defaults["tag"], defocus=True, r=r)
             image, dec_area = decentration.plot_decentration()
         
         if self.mix_type == 3:

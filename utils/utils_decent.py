@@ -23,13 +23,14 @@ def cv2pil(img):
     return image
 
 class Decentration_Cal:
-    def __init__(self, segment, image, optic_center, tag, defocus):
+    def __init__(self, segment, image, optic_center, tag, defocus, r):
         self.segment = segment
         self.image = image
         self.optic_center = optic_center
         self.tag = tag
         assert isinstance(defocus, bool), "defocus必须是布尔值, True为检测离焦环, Fasle为不检测离焦环!"
         self.defocus = defocus
+        self.r = r
 
     def centers_cal(self):
         ## 计算图片中心和治疗区中心，坐标以图片左上角为原点
@@ -98,6 +99,36 @@ class Decentration_Cal:
         res = np.array([np.rint(dist), alpha]).astype("int64")
         return res
 
+    def intersection_area(self):
+        ## 计算瞳孔相交面积
+        # 先绘制一个圆
+        rad = int(self.r * length_unit)
+        img = np.zeros_like(pil2cv(self.image), dtype=np.uint8)
+        img = cv2.circle(img, self.optic_center, rad, (255, 255, 255), thickness=-1)
+        img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        _, img_thresh = cv2.threshold(img_gray, 127, 255, cv2.THRESH_BINARY)
+
+        if self.defocus == True:
+            im_center, tz_center, cnt, df_cnt = self.centers_cal()
+        else:
+            im_center, tz_center, cnt = self.centers_cal()
+
+        # 计算治疗区与圆的相交面积
+        tz_mask = np.zeros_like(img_gray)
+        tz_mask = cv2.drawContours(tz_mask, [cnt], 0, 255, thickness=-1)
+        intersection_tz = np.logical_and(img_thresh, tz_mask)
+        intersection_tz_area = np.sum(intersection_tz)
+
+        if self.defocus == True:
+            # 计算离焦环与圆的相交面积
+            df_mask = np.zeros_like(img_gray)
+            df_mask = cv2.drawContours(df_mask, [df_cnt], 0, 255, thickness=-1)
+            intersection_df = np.logical_and(img_thresh, df_mask)
+            intersection_df_area = np.sum(intersection_df) - intersection_tz_area
+            return intersection_tz_area, intersection_df_area
+        else:
+            return intersection_tz_area
+
     def plot_decentration(self):
         ## 绘制中心点和偏心度
         image = pil2cv(self.image)
@@ -106,6 +137,16 @@ class Decentration_Cal:
             im_center, tz_center, cnt, df_cnt = self.centers_cal()
         else:
             im_center, tz_center, cnt = self.centers_cal()
+        # 添加瞳孔交叉面积(只有在有单位文件在的情况下生效)
+        if units_setting:
+            if self.r is not None:
+                intersection_areas = self.intersection_area()
+                if self.defocus == True:
+                    tz_intersection_area, df_intersection_area = intersection_areas
+                else:
+                    tz_intersection_area = intersection_areas
+            else:
+                pass
         # 设置中心点颜色，颜色顺序为BGR
         optic_center_color = (0, 255, 0)
         tz_center_color = (255, 0, 0)
@@ -127,9 +168,16 @@ class Decentration_Cal:
         # 绘制光区边缘和离焦环边缘
         area = int(cv2.contourArea(cnt))
         res = cv2.drawContours(res, [cnt], -1, tz_color, 2)
+        # 如果检测离焦环则绘制其边缘
         if self.defocus == True:
             df_area = int(cv2.contourArea(df_cnt))
             res = cv2.drawContours(res, [df_cnt], -1, df_color, 2)
+        else:
+            pass
+        # 如果r不等于None则绘制瞳孔
+        if self.r is not None:
+            rad = int(self.r * length_unit)
+            res = cv2.circle(res, self.optic_center, rad, (0, 0, 0), 2)
         else:
             pass
         # 添加文字
@@ -157,9 +205,21 @@ class Decentration_Cal:
             if units_setting == True:
                 dfarea = np.round((df_area - area) / square_unit, 2)
                 df_area_text = f"PSZ Area: {dfarea} mm^2"
+                if self.r is not None:
+                    tziarea = np.round(tz_intersection_area / square_unit, 2)
+                    dfiarea = np.round(df_intersection_area / square_unit, 2)
+                    if tziarea > tzarea:
+                        tziarea = tzarea
+                    if dfiarea > dfarea:
+                        dfiarea = dfarea
+                    tz_i_text = f"TZ overlap Pupil: {tziarea} mm^2"
+                    df_i_text = f"PSZ overlap Pupil: {dfiarea} mm^2"
                 # 根据tag判断是否添加左上角标注
                 if self.tag:
-                    res = cv2.rectangle(res, (0, 0), (250, 45), (255, 255, 255), -1)
+                    if self.r is not None:
+                        res = cv2.rectangle(res, (0, 0), (250, 80), (255, 255, 255), -1)
+                    else:
+                        res = cv2.rectangle(res, (0, 0), (250, 45), (255, 255, 255), -1)
                     res = cv2.circle(res, (210, 3), 2, (0, 0, 0), 1)
             elif units_setting == False:
                 dfarea = df_area - area
@@ -169,13 +229,26 @@ class Decentration_Cal:
                     res = cv2.circle(res, (200, 3), 2, (0, 0, 0), 1)
             if self.tag:
                 res = cv2.putText(res, df_area_text, (15, 40), font_type, 0.38, df_color, 1)
+                if self.r is not None:
+                    res = cv2.putText(res, tz_i_text, (15, 55), font_type, 0.38, (0,0,0), 1)
+                    res = cv2.putText(res, df_i_text, (15, 70), font_type, 0.38, (0,0,0), 1)
             # 返回面积和偏心率
-            decent_area = [decent_len, decent_angle, tzarea, dfarea]
+            if self.r is not None:
+                decent_area = [decent_len, decent_angle, tzarea, dfarea, tziarea, dfiarea]
+            else:
+                decent_area = [decent_len, decent_angle, tzarea, dfarea]
         else:
             if self.tag:
-                res = cv2.rectangle(res, (0, 0), (220, 30), (255, 255, 255), -1)
-            # 返回面积和偏心率
-            decent_area = [decent_len, decent_angle, tzarea]
+                # 返回面积和偏心率
+                if self.r is not None:
+                    tziarea = np.round(tz_intersection_area / square_unit, 2)
+                    tz_i_text = f"TZ overlap Pupil: {tziarea} mm^2"
+                    res = cv2.rectangle(res, (0, 0), (220, 45), (255, 255, 255), -1)
+                    res = cv2.putText(res, tz_i_text, (15, 40), font_type, 0.38, (0,0,0), 1)
+                    decent_area = [decent_len, decent_angle, tzarea, tziarea]
+                else:
+                    res = cv2.rectangle(res, (0, 0), (220, 30), (255, 255, 255), -1)
+                    decent_area = [decent_len, decent_angle, tzarea]
         if self.tag:
             res = cv2.putText(res, decent_str, (15, 10), font_type, 0.38, (0, 0, 0), 1)
             res = cv2.putText(res, tz_area, (15, 25), font_type, 0.38, tz_color, 1)
