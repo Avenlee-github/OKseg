@@ -1,5 +1,5 @@
 ## OKseg: Automatic Dtection Model for Treatment Zone and Peripheral Steepened Zone after Orthokeratology Treatment Based on Segformer
-  <img src=".\figures\okseg_logo.png" alt="logo" style="zoom:7%;" />
+  <img src=".\figures\okseg_logo.png" alt="logo" style="zoom:5%;" />
 ---
 
 ### Catalogue
