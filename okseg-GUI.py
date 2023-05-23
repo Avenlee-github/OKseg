@@ -7,12 +7,21 @@ import os
 from PIL import Image
 import threading
 import webbrowser
-
+from utils.utils_unitcalc import unit_cal
 from segformer import SegFormer_Segmentation
 
 root_path = os.path.abspath('.')
 dir_input_path = os.path.join(root_path, "img")
 dir_pupil_path = os.path.join(dir_input_path, "pupil_radius.xlsx")
+
+# calculate units
+try:
+    unit_cal()
+    print("unit file generated.")
+except:
+    print("Please ensure the metric-using image 'metric.png' has been put in 'utils/metric/' folder.")
+
+print("Model loading...")
 
 def open_webpage():
     webbrowser.open("http://127.0.0.1:7860/")  # 使用默认端口 7860
