@@ -12,24 +12,11 @@
 7. [Reference](#Reference)
 
 ## Installment 
-### Stable Version
-This version provides a virtual environment for the program, which has been contained in the <font color=#FFFF00>***"venv.rar"***</font> file.
-
-1. Please ensure that Python 3 has been installed on your computer (and has been set in System Path).
-2. Clone or donwload the <font color=#FFFF00>***"stable"***</font> branch to your computer/device.
-
-  <img src=".\figures\stable_shift.png" alt="stable" style="zoom:40%;" />
-
-3. Please extract the contents of <font color=#FFFF00>***"venv.rar"***</font> in the current folder and ensure that the <font color=#FFFF00>***"venv"***</font> folder is correctly present in the program folder. Since <font color=#FFFF00>***"venv.rar"***</font> is a split volume compression, please decompress all <font color=#FFFF00>***"venv.part0*.rar"***</font> after downloading.
-4. The <font color=#FFFF00>***"venv"***</font> folder should contain the "include", "Lib", "Scripts", and "share" folders, as well as the "pyvenv.cfg" file.
-
 ### Main Branch Version
-This version dosen't provide virtual environment for the program, and the environment could be set up by following steps:
-
 1. Please ensure that Python 3 has been installed on your computer (and has been set in System Path).
 2. Clone or donwload the <font color=#FFFF00>***"main"***</font> branch to your computer/device.
 
-  <img src=".\figures\main_shift.png" alt="stable" style="zoom:40%;" />
+  <img src=".\figures\main_shift.png" alt="main" style="zoom:40%;" />
 
 3. Open the Powershell or Command Line Interface;
 4. Enter the OKseg directory and use the <font color=#FFFF00>***"installment.py"***</font> to set up the environment for OKseg:
