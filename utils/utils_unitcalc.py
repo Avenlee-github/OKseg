@@ -40,6 +40,47 @@ def unit_cal(img_path="utils/metric/metric.png", ksize=6):
     with open(param_filename, 'w') as file:
         file.write(f"length_unit = {len_unit}\n")
         file.write(f"square_unit = {square_unit}")
+    return f"Unit file generated successfully, the length unit: {len_unit} pixels; the area unit: {square_unit} pixels."
+
+# for webui use
+def unit_cal_ui(image_pil, ksize=6):
+    # convert pil into cv2
+    img = cv2.cvtColor(np.asarray(image_pil), cv2.COLOR_RGB2BGR)
+    # calculation
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    kernel = np.ones((ksize, ksize), np.uint8)
+    _, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
+    post_img = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
+    # set the range of edge width
+    img_width = img.shape[1]
+    min_edge, max_edge = img_width/20, img_width/10
+    # screen the boundary
+    contours, _ = cv2.findContours(post_img, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+    edges = []
+    for obj in contours:
+        perimeter = cv2.arcLength(obj, True)
+        approx = cv2.approxPolyDP(obj, 0.02*perimeter, True)# acquire corner coordinates
+        corner_num = len(approx)
+        x, y, w, h = cv2.boundingRect(approx)
+        # screening process
+        if corner_num == 4 and w == h:
+            if w >= min_edge and w <= max_edge:
+                edges.append(w)
+        else:
+            continue
+    len_unit = np.argmax(np.bincount(edges))
+    square_unit = np.square(len_unit)
+    # write the parameters into file
+    param_filename = "utils/units.py"
+    try:
+        os.remove(param_filename)
+    except:
+        pass
+    with open(param_filename, 'w') as file:
+        file.write(f"length_unit = {len_unit}\n")
+        file.write(f"square_unit = {square_unit}")
+    return f"Unit file generated successfully, the length unit: {len_unit} pixels/mm; the area unit: {square_unit} pixels/mm^2."
+
 
 # params setting
 def parse_opt():

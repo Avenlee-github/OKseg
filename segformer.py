@@ -23,53 +23,19 @@ from utils.hgnet.center_predict import predict
 #   如果出现shape不匹配，一定要注意训练时的model_path、backbone和num_classes的修改
 #-----------------------------------------------------------------------------------#
 class SegFormer_Segmentation(object):
-    _defaults = {
-        #-------------------------------------------------------------------#
-        #   model_path指向logs文件夹下的权值文件
-        #   训练好后logs文件夹下存在多个权值文件，选择验证集损失较低的即可。
-        #   验证集损失较低不代表miou较高，仅代表该权值在验证集上泛化性能较好。
-        #-------------------------------------------------------------------#
-        "model_path"        : "model_data/model.pth",
-        #----------------------------------------#
-        #   所需要区分的类的个数+1
-        #----------------------------------------#
-        "num_classes"       : 3,
-        #----------------------------------------#
-        #   所使用的的主干网络：
-        #   b0、b1、b2、b3、b4、b5
-        #----------------------------------------#
-        "phi"               : "b0",
-        #----------------------------------------#
-        #   输入图片的大小
-        #----------------------------------------#
-        "input_shape"       : [512, 512],
-        #-------------------------------------------------#
-        #   mix_type参数用于控制检测结果的可视化方式
-        #
-        #   mix_type = 0的时候代表原图与生成的图进行混合
-        #   mix_type = 1的时候代表仅保留生成的图
-        #   mix_type = 2的时候代表仅扣去背景，仅保留原图中的目标
-        #   mix_type = 3的时候代表返回标注离心度和治疗区中心的图片
-        #-------------------------------------------------#
-        "mix_type"          : 3,
-        #-------------------------------#
-        #   是否使用Cuda
-        #   没有GPU可以设置成False
-        #-------------------------------#
-        "cuda"              : False,
-        #-------------------------------#
-        #   是否在图片左上角添加tag
-        #-------------------------------#
-        "tag"               : True,
-    }
-
     #---------------------------------------------------#
     #   初始化SegFormer
     #---------------------------------------------------#
-    def __init__(self, **kwargs):
-        self.__dict__.update(self._defaults)
-        for name, value in kwargs.items():
-            setattr(self, name, value)
+    def __init__(self, model_path, phi, tag, num_classes=3, input_shape=[512, 512],
+                 mix_type=3, cuda=False):
+        self.model_path = model_path
+        self.phi = phi
+        self.tag = tag
+        self.num_classes = num_classes
+        self.input_shape = input_shape
+        self.mix_type = mix_type
+        self.cuda = cuda
+
         #---------------------------------------------------#
         #   画框设置不同的颜色
         #---------------------------------------------------#
@@ -86,8 +52,6 @@ class SegFormer_Segmentation(object):
         #   获得模型
         #---------------------------------------------------#
         self.generate()
-        
-        show_config(**self._defaults)
                     
     #---------------------------------------------------#
     #   获得所有的分类
@@ -235,7 +199,7 @@ class SegFormer_Segmentation(object):
             #   添加离心度
             #------------------------------------------------#
             oc = predict(img=old_img, model=self.hgnet, mode="coordinate")
-            decentration = Decentration_Cal(segment=seg_img, image=old_img, optic_center=oc, tag=self._defaults["tag"], defocus=True, r=r)
+            decentration = Decentration_Cal(segment=seg_img, image=old_img, optic_center=oc, tag=self.tag, defocus=True, r=r)
             image, dec_area = decentration.plot_decentration()
         
         if self.mix_type == 3:
