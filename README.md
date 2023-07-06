@@ -11,10 +11,18 @@
 6. [Reference](#Reference)
 
 ## Installment 
+<<<<<<< HEAD
 1. Please ensure that Python 3 (**"python>=3.7.0"**) has been installed on your computer (and has been set in System Path).
 2. Clone or donwload the <font color=#FFFF00>***"main"***</font> repository to your computer/device.
 
   <img src=".\figures\download_page.png" alt="stable" style="zoom:40%;" />
+=======
+### Main Branch Version
+1. Please ensure that Python 3 has been installed on your computer (and has been set in System Path).
+2. Clone or donwload the <font color=#FFFF00>***"main"***</font> branch to your computer/device.
+
+  <img src=".\figures\main_shift.png" alt="main" style="zoom:40%;" />
+>>>>>>> 4fa63a2998d0def5dec0dafbef3f30092e240e88
 
 3. Open the Powershell or Command Line Interface;
 4. Enter the OKseg directory and use the <font color=#FFFF00>***"installment.py"***</font> to set up the environment for OKseg:
