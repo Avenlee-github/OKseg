@@ -182,10 +182,10 @@ class Decentration_Cal:
             pass
         # 添加文字
         if im_center[1] > tz_center[1]:
-            res = cv2.putText(res, "Optic Center", (im_center[0] - 30, im_center[1] + 20), font_type, font_size, (255, 255, 255), font_thickness)
+            res = cv2.putText(res, "Corneal Vertex", (im_center[0] - 30, im_center[1] + 20), font_type, font_size, (255, 255, 255), font_thickness)
             res = cv2.putText(res, "TZ Center", (tz_center[0] - 20, tz_center[1] - 20), font_type, font_size, (255, 255, 255), font_thickness)
         else:
-            res = cv2.putText(res, "Optic Center", (im_center[0] - 30, im_center[1] - 20), font_type, font_size, (255, 255, 255), font_thickness)
+            res = cv2.putText(res, "Corneal Vertex", (im_center[0] - 30, im_center[1] - 20), font_type, font_size, (255, 255, 255), font_thickness)
             res = cv2.putText(res, "TZ Center", (tz_center[0] - 20, tz_center[1] + 20), font_type, font_size, (255, 255, 255), font_thickness)
         # 添加偏心率面积
         decentration = self.decentration_cal()
